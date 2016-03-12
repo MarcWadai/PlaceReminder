@@ -27,20 +27,19 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         this.navDrawerItems = navDrawerItems;
     }
 
-
     @Override
     public int getCount() {
-        return 0;
+        return navDrawerItems.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return navDrawerItems.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -69,4 +68,5 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 }
