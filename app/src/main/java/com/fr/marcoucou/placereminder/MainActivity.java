@@ -1,20 +1,20 @@
 package com.fr.marcoucou.placereminder;
 
-import android.app.Activity;
+
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         // What's hot, We  will add a counter here
         navDrawerItems.add(new NavigationDrawer(navMenuTitles[5], R.drawable.ic_home));
 
-
         // Recycle the typed array
         //navMenuIcons.recycle();
 
@@ -108,6 +107,43 @@ public class MainActivity extends AppCompatActivity {
             // on first time display view for first nav item
             //displayView(0);
         }
+
+
+        mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+    }
+
+    /**
+     * Slide menu item click listener
+     * */
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
+    }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
+    private void displayView(int position) {
+        // update the main content by replacing fragments
+        Fragment fragment =  new ListPlacesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_container, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerList.setSelection(position);
+        setTitle(navMenuTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
 
