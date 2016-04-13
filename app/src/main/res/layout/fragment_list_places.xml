@@ -3,8 +3,13 @@
     android:layout_height="match_parent"
     tools:context="com.fr.marcoucou.placereminder.ListPlacesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ListView
+        android:id="@+id/list_places"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:dividerHeight="2dp"
+        android:listSelector="@drawable/list_selector"/>
 
 </FrameLayout>

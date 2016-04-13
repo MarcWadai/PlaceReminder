@@ -15,27 +15,26 @@ import com.fr.marcoucou.placereminder.model.NavigationDrawer;
 import java.util.ArrayList;
 
 /**
- * Created by Marc on 11/03/2016.
+ * Created by Marc on 15/03/2016.
  */
-
-public class NavigationDrawerAdapter extends BaseAdapter {
+public class ListPlacesAdapter extends BaseAdapter{
 
     private Context context;
-    private ArrayList<NavigationDrawer> navDrawerItems;
+    private ArrayList<String> items;
 
-    public NavigationDrawerAdapter(Context context, ArrayList<NavigationDrawer> navDrawerItems){
+    public ListPlacesAdapter(Context context, ArrayList<String> items){
         this.context = context;
-        this.navDrawerItems = navDrawerItems;
+        this.items = items;
     }
 
     @Override
     public int getCount() {
-        return navDrawerItems.size();
+        return items.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return navDrawerItems.get(position);
+        return items.get(position);
     }
 
     @Override
@@ -48,16 +47,14 @@ public class NavigationDrawerAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.navdrawer_list_item, null);
+            convertView = mInflater.inflate(R.layout.places_list_item, null);
         }
 
-        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.icon);
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
+        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.iconPlace);
+        TextView txtTitle = (TextView) convertView.findViewById(R.id.titlePlaces);
 
-        imgIcon.setImageResource(navDrawerItems.get(position).getIcon());
-        txtTitle.setText(navDrawerItems.get(position).getTitle());
+        txtTitle.setText(items.get(position).toString());
 
         return convertView;
     }
-
 }

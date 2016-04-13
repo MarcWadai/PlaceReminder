@@ -1,6 +1,5 @@
 package com.fr.marcoucou.placereminder;
 
-
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -15,12 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
-
 import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -56,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-
         navDrawerItems = new ArrayList<NavigationDrawer>();
 
         // adding nav drawer items to array
@@ -75,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Recycle the typed array
         //navMenuIcons.recycle();
-
         // setting the nav drawer list adapter
         adapter = new NavigationDrawerAdapter(getApplicationContext(),
                 navDrawerItems);
@@ -105,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            //displayView(0);
+            displayView(1);
         }
 
 
@@ -207,4 +202,5 @@ public class MainActivity extends AppCompatActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
 }
