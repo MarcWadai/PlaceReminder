@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -28,6 +29,7 @@ public class PlaceInformation extends AppCompatActivity{
     private Bitmap thumbnail;
     private NumberPicker categoryPicker;
     private Context myContext;
+    private Button submitButton;
     int CAMERA_PIC_REQUEST = 2;
 
     @Override
@@ -39,6 +41,7 @@ public class PlaceInformation extends AppCompatActivity{
         placeImageView = (ImageView) findViewById(R.id.imageView);
         title = (EditText) findViewById(R.id.editTextTitle);
         address = (EditText) findViewById(R.id.editTextAddress);
+        submitButton = (Button) findViewById(R.id.buttonSubmitPlace);
         categoryPicker = (NumberPicker) findViewById(R.id.categoryPicker);
         categoryPicker.setMinValue(0);
         categoryPicker.setMaxValue(3);
@@ -66,7 +69,7 @@ public class PlaceInformation extends AppCompatActivity{
         }
         else
         {
-            Toast.makeText(PlaceInformation.this, "Picture NOT taken", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Picture NOT taken", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -93,8 +96,8 @@ public class PlaceInformation extends AppCompatActivity{
 
 
     public void SubmitPlace(View v){
-        if(title.getText().toString() == "" || address.getText().toString() == ""){
-            Toast.makeText(PlaceInformation.this, "Please enter title and adress", Toast.LENGTH_LONG).show();
+        if(title.getText().toString().matches("") || address.getText().toString().matches("")){
+            Toast.makeText(this, "Please enter title and address", Toast.LENGTH_SHORT).show();
         }
         else {
             PlacesDataSource placesDataSource = new PlacesDataSource(this);

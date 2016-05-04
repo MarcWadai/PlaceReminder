@@ -14,51 +14,15 @@
         android:layout_height="250dp"
         android:id="@+id/imageView"
         android:src="@drawable/ic_empty_picture"
-        android:layout_below="@+id/textViewImage"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:id="@+id/textViewTitle"
-        android:gravity="center"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/editTextTitle" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextTitle"
-        android:layout_below="@+id/textViewTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Place picture"
-        android:id="@+id/textViewImage"
-        android:gravity="center"
-        android:layout_alignRight="@+id/editTextTitle"
-        android:layout_alignEnd="@+id/editTextTitle"
-        android:layout_below="@+id/editTextTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Place Adresse"
-        android:id="@+id/textViewAddress"
-        android:gravity="center"
-        android:layout_below="@+id/imageView"
+        android:hint="Title"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -68,9 +32,10 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/editTextAddress"
-        android:layout_below="@+id/textViewAddress"
+        android:hint="address"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -92,8 +57,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/textViewAddress"
-        android:layout_alignEnd="@+id/textViewAddress" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <NumberPicker
         android:layout_width="wrap_content"
@@ -102,8 +67,8 @@
         android:layout_above="@+id/buttonSubmitPlace"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editTextAddress"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/editTextAddress" />
 
 </RelativeLayout>
