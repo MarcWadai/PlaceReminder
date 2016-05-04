@@ -3,17 +3,17 @@
     android:shape="rectangle" >
 
     <!-- view background color -->
-    <solid android:color="@color/text_color" >
+    <solid android:color="@android:color/darker_gray" >
     </solid>
 
     <!-- If you want to add some padding -->
     <padding
-        android:right="3dp"
-        android:left="3dp" >
+        android:right="20dp"
+        android:left="20dp" >
     </padding>
 
     <!-- Here is the corner radius -->
-    <corners android:radius="2dp" >
+    <corners android:radius="10dp" >
     </corners>
 
 </shape>

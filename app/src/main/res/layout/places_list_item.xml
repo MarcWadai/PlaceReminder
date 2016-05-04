@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@drawable/round_corner">
 
     <ImageView
         android:id="@+id/iconPlace"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:src="@drawable/ic_home"
-        android:layout_centerVertical="true"
-        />
+        android:layout_centerVertical="true" />
 
     <TextView
 
         android:id="@+id/titlePlaces"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@id/icon"
+        android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@color/list_item_title"
-        android:gravity="center"
-        android:paddingRight="40dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/iconPlace"
+        android:layout_toEndOf="@+id/iconPlace"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/textAdresse" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rue du jesaispas quoi"
+        android:id="@+id/textAdresse"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/titlePlaces"
+        android:layout_alignStart="@+id/titlePlaces"
+        android:layout_below="@+id/iconPlace" />
 
 </RelativeLayout>

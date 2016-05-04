@@ -1,4 +1,4 @@
-package com.fr.marcoucou.placereminder;
+package com.fr.marcoucou.placereminder.activities;
 
 import android.app.FragmentManager;
 import android.content.res.Configuration;
@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.fr.marcoucou.placereminder.ListPlacesFragment;
+import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
 import java.util.ArrayList;
@@ -56,18 +59,10 @@ public class MainActivity extends AppCompatActivity {
         navDrawerItems = new ArrayList<NavigationDrawer>();
 
         // adding nav drawer items to array
-        // Home
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[0], R.drawable.ic_home));
-        // Find People
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[1], R.drawable.ic_home));
-        // Photos
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[2], R.drawable.ic_home));
-        // Communities, Will add a counter here
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[3], R.drawable.ic_home));
-        // Pages
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[4],R.drawable.ic_home));
-        // What's hot, We  will add a counter here
-        navDrawerItems.add(new NavigationDrawer(navMenuTitles[5], R.drawable.ic_home));
+
+        for (int i= 0 ;i < navMenuTitles.length; i++ ){
+            navDrawerItems.add(new NavigationDrawer(navMenuTitles[i],R.drawable.ic_home));
+        }
 
         // Recycle the typed array
         //navMenuIcons.recycle();
@@ -105,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+    }
+
+    public void onStart(){
+        super.onStart();
+        displayView(mDrawerList.getCheckedItemPosition());
     }
 
     /**

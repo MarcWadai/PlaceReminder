@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
+import com.fr.marcoucou.placereminder.model.Places;
 
 import java.util.ArrayList;
 
@@ -20,9 +21,9 @@ import java.util.ArrayList;
 public class ListPlacesAdapter extends BaseAdapter{
 
     private Context context;
-    private ArrayList<String> items;
+    private ArrayList<Places> items;
 
-    public ListPlacesAdapter(Context context, ArrayList<String> items){
+    public ListPlacesAdapter(Context context, ArrayList<Places> items){
         this.context = context;
         this.items = items;
     }
@@ -52,8 +53,9 @@ public class ListPlacesAdapter extends BaseAdapter{
 
         ImageView imgIcon = (ImageView) convertView.findViewById(R.id.iconPlace);
         TextView txtTitle = (TextView) convertView.findViewById(R.id.titlePlaces);
-
-        txtTitle.setText(items.get(position).toString());
+        TextView txtAddress = (TextView) convertView.findViewById(R.id.textAdresse);
+        txtTitle.setText(items.get(position).getTitle());
+        txtAddress.setText(items.get(position).getAdresse());
 
         return convertView;
     }
