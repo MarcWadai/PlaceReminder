@@ -16,11 +16,13 @@ public class SQLHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_ADRESSE = "adresse";
     public static final String COLUMN_CATEGORY = "category";
+    public static final String COLUMN_IMAGE = "image";
 
     // when fetching the column used
     public static final int COLUMN_TITLE_ID = 1;
     public static final int COLUMN_ADRESSE_ID = 2;
-
+    public static final int COLUMN_CATEGORY_ID = 3;
+    public static final int COLUMN_IMAGE_ID = 4;
     //DATABASE Info
     private static final String DATABASE_NAME = "placereminder.db";
     private static final int DATABASE_VERSION = 1;
@@ -29,7 +31,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CREATE = "create table "
             + TABLE_PLACES + "(" + COLUMN_ID
             + " integer primary key autoincrement, " + COLUMN_TITLE
-            + " text not null, " + COLUMN_ADRESSE + " text not null, " + COLUMN_CATEGORY + " integer);";
+            + " text not null, " + COLUMN_ADRESSE + " text not null, " + COLUMN_CATEGORY + " integer, " +COLUMN_IMAGE + " blob);";
 
     // Variable to fetch the data in the db
     public static final String QUERY_GET_PLACES_IN_CATEGORY = " SELECT from * in " + TABLE_PLACES+ " WHERE "+ COLUMN_CATEGORY+ "= ?";

@@ -56,6 +56,9 @@ public class ListPlacesAdapter extends BaseAdapter{
         TextView txtAddress = (TextView) convertView.findViewById(R.id.textAdresse);
         txtTitle.setText(items.get(position).getTitle());
         txtAddress.setText(items.get(position).getAdresse());
+        if(items.get(position).getPlaceImage() != null) {
+            imgIcon.setImageBitmap(items.get(position).getPlaceImage());
+        }
 
         return convertView;
     }

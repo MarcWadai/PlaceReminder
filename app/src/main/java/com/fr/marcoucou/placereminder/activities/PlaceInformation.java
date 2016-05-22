@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,7 @@ public class PlaceInformation extends AppCompatActivity{
     private NumberPicker categoryPicker;
     private Context myContext;
     private Button submitButton;
+    private Boolean pictureTaken = false;
     int CAMERA_PIC_REQUEST = 2;
 
     @Override
@@ -45,7 +48,7 @@ public class PlaceInformation extends AppCompatActivity{
         categoryPicker = (NumberPicker) findViewById(R.id.categoryPicker);
         categoryPicker.setMinValue(0);
         categoryPicker.setMaxValue(3);
-        categoryPicker.setDisplayedValues(new String[]{"Restaurant", "Scenery", "Shopping", "Dont know where to put this"});
+        categoryPicker.setDisplayedValues(getResources().getStringArray(R.array.nav_drawer_items));
         this.myContext = this;
         placeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +69,11 @@ public class PlaceInformation extends AppCompatActivity{
         {
             thumbnail = (Bitmap) data.getExtras().get("data");
             placeImageView.setImageBitmap(thumbnail);
+            pictureTaken = true;
         }
         else
         {
+            pictureTaken = false;
             Toast.makeText(this, "Picture NOT taken", Toast.LENGTH_LONG).show();
         }
 
@@ -102,11 +107,19 @@ public class PlaceInformation extends AppCompatActivity{
         else {
             PlacesDataSource placesDataSource = new PlacesDataSource(this);
             placesDataSource.open();
-            Log.d("place", "category chosen" + categoryPicker.getValue());
-            PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
-            placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat);
-            placesDataSource.close();
+            if (!pictureTaken) {
+                Log.d("place", "we didnt took a picture");
+                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
+                BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(this, R.drawable.ic_empty_picture);
+                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, drawable.getBitmap());
 
+            }
+            else{
+                Log.d("place", "we took a picture");
+                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
+                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, thumbnail);
+            }
+            placesDataSource.close();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

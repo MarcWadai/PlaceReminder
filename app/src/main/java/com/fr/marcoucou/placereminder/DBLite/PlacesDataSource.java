@@ -5,7 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
+import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.model.PlaceCategory;
 import com.fr.marcoucou.placereminder.model.Places;
 
@@ -20,9 +25,12 @@ public class PlacesDataSource {
     private SQLiteDatabase database;
     private SQLHelper databaseHelper;
     private SQLiteDatabase readabledb;
-    private String[] allColumns = { SQLHelper.COLUMN_ID,SQLHelper.COLUMN_TITLE, SQLHelper.COLUMN_ADRESSE };
+    private String[] allColumns = { SQLHelper.COLUMN_ID,SQLHelper.COLUMN_TITLE, SQLHelper.COLUMN_ADRESSE, SQLHelper.COLUMN_CATEGORY, SQLHelper.COLUMN_IMAGE };
+    private Context context;
+
     public PlacesDataSource(Context context){
         databaseHelper = new SQLHelper(context);
+        this.context = context;
     }
 
     public void open() throws SQLException {
@@ -34,12 +42,13 @@ public class PlacesDataSource {
         databaseHelper.close();
     }
 
-    public Places createPlaces(String titlePlace, String placeAdresse, PlaceCategory category){
+    public Places createPlaces(String titlePlace, String placeAdresse, PlaceCategory category, Bitmap image){
 
         ContentValues values = new ContentValues();
         values.put(SQLHelper.COLUMN_TITLE, titlePlace);
         values.put(SQLHelper.COLUMN_ADRESSE, placeAdresse);
         values.put(SQLHelper.COLUMN_CATEGORY, category.getCategoryId());
+        values.put(SQLHelper.COLUMN_IMAGE, DbBitmapUtility.getBytes(image));
         long insertId = database.insert(SQLHelper.TABLE_PLACES, null,
                 values);
         Cursor cursor = readabledb.query(SQLHelper.TABLE_PLACES,
@@ -56,6 +65,8 @@ public class PlacesDataSource {
         place.setPlaceId(cursor.getLong(0));
         place.setTitle(cursor.getString(SQLHelper.COLUMN_TITLE_ID));
         place.setAdresse(cursor.getString(SQLHelper.COLUMN_ADRESSE_ID));
+        place.setPlaceImage( DbBitmapUtility.getImage(cursor.getBlob(SQLHelper.COLUMN_IMAGE_ID)));
+
         return place;
     }
 
@@ -80,7 +91,7 @@ public class PlacesDataSource {
 
     public ArrayList<Places> getPlacesFromCategory(int placeCategory){
         ArrayList<Places> listPlaces = new ArrayList<Places>();
-        String query = " SELECT * from " + SQLHelper.TABLE_PLACES + " WHERE " + SQLHelper.COLUMN_CATEGORY + " = " + placeCategory;
+        String query = "select * from " + SQLHelper.TABLE_PLACES + " where " + SQLHelper.COLUMN_CATEGORY + " = " + placeCategory;
         Cursor  cursor = readabledb.rawQuery(query, null);
         if (cursor .moveToFirst()) {
 

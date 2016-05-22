@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             // on first time display view for first nav item
             displayView(1);
         }
-
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
     }

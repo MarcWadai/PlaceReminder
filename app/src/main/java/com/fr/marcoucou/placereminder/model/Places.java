@@ -1,5 +1,7 @@
 package com.fr.marcoucou.placereminder.model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Marc on 15/03/2016.
  */
@@ -12,7 +14,25 @@ public class Places {
     private Double latitude;
     private Double longitude;
     private String comment;
+
+
+
     private PlaceCategory category;
+    private Bitmap placeImage;
+
+
+    public Bitmap getPlaceImage() {
+        return placeImage;
+    }
+
+    public void setPlaceImage(Bitmap placeImage) {
+        this.placeImage = placeImage;
+    }
+
+
+
+    public Places() {
+    }
 
     public PlaceCategory getCategory(){return category;}
 
@@ -38,5 +58,8 @@ public class Places {
 
     public void setAdresse(String adresse){
         this.adresse = adresse;
+    }
+    public void setCategory(PlaceCategory category) {
+        this.category = category;
     }
 }
