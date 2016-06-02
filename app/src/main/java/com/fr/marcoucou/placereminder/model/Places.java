@@ -1,13 +1,15 @@
 package com.fr.marcoucou.placereminder.model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Marc on 15/03/2016.
  */
 
 
-public class Places {
+public class Places implements Parcelable {
     private long placeId;
     private String title;
     private String adresse;
@@ -20,6 +22,8 @@ public class Places {
     private PlaceCategory category;
     private Bitmap placeImage;
 
+    public Places() {
+    }
 
     public Bitmap getPlaceImage() {
         return placeImage;
@@ -27,11 +31,6 @@ public class Places {
 
     public void setPlaceImage(Bitmap placeImage) {
         this.placeImage = placeImage;
-    }
-
-
-
-    public Places() {
     }
 
     public PlaceCategory getCategory(){return category;}
@@ -61,5 +60,20 @@ public class Places {
     }
     public void setCategory(PlaceCategory category) {
         this.category = category;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(adresse);
+        dest.writeLong(placeId);
+        dest.writeValue(category);
+        placeImage.writeToParcel(dest,flags);
     }
 }

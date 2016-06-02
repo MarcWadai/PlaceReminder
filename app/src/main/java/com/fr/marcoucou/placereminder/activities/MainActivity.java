@@ -1,10 +1,11 @@
 package com.fr.marcoucou.placereminder.activities;
 
-import android.app.FragmentManager;
+
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fr.marcoucou.placereminder.ListPlacesFragment;
+import com.fr.marcoucou.placereminder.PlacesViewPagerFragment;
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
@@ -125,12 +127,27 @@ public class MainActivity extends AppCompatActivity {
      * */
     private void displayView(int position) {
         // update the main content by replacing fragments
-        Fragment fragment =  new ListPlacesFragment();
+       /* Fragment fragment =  new ListPlacesFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
         fragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.frame_container, fragment).commit();
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerList.setSelection(position);
+        setTitle(navMenuTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);*/
+
+        Fragment fragment =  new PlacesViewPagerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.frame_container, fragment).commit();
 
