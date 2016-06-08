@@ -53,10 +53,17 @@ public class PlacesViewPagerFragment extends Fragment {
         View myFragmentView = inflater.inflate(R.layout.fragment_places_view_pager, container, false);
         mPager = (ViewPager) myFragmentView.findViewById(R.id.pager);
         fabAdd = (FloatingActionButton) myFragmentView.findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PlaceInformation.class);
+                startActivity(intent);
+            }
+        });
         fabDelete = (FloatingActionButton) myFragmentView.findViewById(R.id.fabDelete);
         fabViewAll = (FloatingActionButton) myFragmentView.findViewById(R.id.fabViewAll);
         context = container.getContext();
-
+        initializationView();
         return myFragmentView;
     }
 

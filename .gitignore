@@ -1,5 +1,4 @@
 .gradle
-
 /local.properties
 
 /.idea
@@ -12,8 +11,6 @@
 /build
 
 /captures
-/build.gradle
-/gradle
 
 #built application files
 *.apk
