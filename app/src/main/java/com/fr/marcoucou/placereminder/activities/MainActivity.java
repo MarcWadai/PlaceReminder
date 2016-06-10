@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.fr.marcoucou.placereminder.ListPlacesFragment;
-import com.fr.marcoucou.placereminder.PlacesViewPagerFragment;
+import com.fr.marcoucou.placereminder.fragment.PlacesViewPagerFragment;
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     // slide menu items
     private String[] navMenuTitles;
-    private TypedArray navMenuIcons;
+    private TypedArray navMenuIcÒons;
 
     private ArrayList<NavigationDrawer> navDrawerItems;
     private NavigationDrawerAdapter adapter;

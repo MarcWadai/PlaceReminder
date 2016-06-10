@@ -1,4 +1,4 @@
-package com.fr.marcoucou.placereminder;
+package com.fr.marcoucou.placereminder.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fr.marcoucou.placereminder.DBLite.PlacesDataSource;
+import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.activities.PlaceInformation;
 import com.fr.marcoucou.placereminder.adapter.ListPlacesAdapter;
 import com.fr.marcoucou.placereminder.model.Places;

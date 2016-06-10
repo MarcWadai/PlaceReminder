@@ -17,8 +17,7 @@
             android:choiceMode="singleChoice"
             android:dividerHeight="3.0sp"
             android:listSelector="@drawable/list_selector"/>
-           <!-- android:divider="@android:color/transparent" -->
-
+        <!-- android:divider="@android:color/transparent" -->
 
     </FrameLayout>
 
@@ -33,6 +32,4 @@
         app:layout_anchor="@id/relativelayoutView"
         app:layout_anchorGravity="bottom|right|end"
         />
-
-
 </android.support.design.widget.CoordinatorLayout>

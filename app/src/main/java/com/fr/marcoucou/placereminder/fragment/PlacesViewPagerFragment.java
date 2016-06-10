@@ -1,4 +1,4 @@
-package com.fr.marcoucou.placereminder;
+package com.fr.marcoucou.placereminder.fragment;
 
 
 import android.content.Context;
@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.fr.marcoucou.placereminder.DBLite.PlacesDataSource;
+import com.fr.marcoucou.placereminder.R;
+import com.fr.marcoucou.placereminder.activities.MapActivity;
 import com.fr.marcoucou.placereminder.activities.PlaceInformation;
+import com.fr.marcoucou.placereminder.activities.PlaceListAll;
 import com.fr.marcoucou.placereminder.adapter.ListPlacesAdapter;
 import com.fr.marcoucou.placereminder.adapter.ViewPagerAdapter;
+import com.fr.marcoucou.placereminder.animation.MyPagerTransformer;
 import com.fr.marcoucou.placereminder.model.Places;
 
 import java.util.ArrayList;
@@ -30,12 +34,14 @@ public class PlacesViewPagerFragment extends Fragment {
     private static final String ARG_PARAM1 = "position";
     private ViewPager mPager;
     private FloatingActionButton fabAdd;
-    private FloatingActionButton fabDelete;
+    private FloatingActionButton fabMap;
     private FloatingActionButton fabViewAll;
     private PlacesDataSource placesDataSource;
     private int mParam1;
     private ViewPagerAdapter viewPagerAdapter;
     private Context context;
+    private MyPagerTransformer pagerTransformer;
+
 
     public PlacesViewPagerFragment() {
         // Required empty public constructor
@@ -52,33 +58,53 @@ public class PlacesViewPagerFragment extends Fragment {
         // Inflate the layout for this fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_places_view_pager, container, false);
         mPager = (ViewPager) myFragmentView.findViewById(R.id.pager);
-        fabAdd = (FloatingActionButton) myFragmentView.findViewById(R.id.fabAdd);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PlaceInformation.class);
-                startActivity(intent);
-            }
-        });
-        fabDelete = (FloatingActionButton) myFragmentView.findViewById(R.id.fabDelete);
-        fabViewAll = (FloatingActionButton) myFragmentView.findViewById(R.id.fabViewAll);
         context = container.getContext();
-        initializationView();
+        initializationView(myFragmentView);
         return myFragmentView;
     }
 
 
 
-    public void initializationView(){
+    public void initializationView(View myFragmentView){
         placesDataSource = new PlacesDataSource(context);
         placesDataSource.open();
+        final ArrayList<Places> itemPlaces;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getInt(ARG_PARAM1);
-            ArrayList<Places> itemPlaces = placesDataSource.getPlacesFromCategory(getArguments().getInt("position"));
+            itemPlaces = placesDataSource.getPlacesFromCategory(getArguments().getInt("position"));
             viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(),context, itemPlaces);
             mPager.setAdapter(viewPagerAdapter);
+            mPager.setPageTransformer(false,new MyPagerTransformer(MyPagerTransformer.TypeAnimation.ZOOM));
             Log.d("param","In the fragment " + mParam1);
+            fabAdd = (FloatingActionButton) myFragmentView.findViewById(R.id.fabAdd);
+            fabAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PlaceInformation.class);
+                    intent.putExtra("indexPlace",getArguments().getInt(ARG_PARAM1));
+                    startActivity(intent);
+                }
+            });
+            fabMap = (FloatingActionButton) myFragmentView.findViewById(R.id.fabMap);
+            fabMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), MapActivity.class);
+                    intent.putExtra("address",itemPlaces.get(mPager.getCurrentItem()).getAdresse());
+                    startActivity(intent);
+                }
+            });
+            fabViewAll = (FloatingActionButton) myFragmentView.findViewById(R.id.fabViewAll);
+            fabViewAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), PlaceListAll.class);
+                    intent.putExtra("indexPlace",getArguments().getInt(ARG_PARAM1));
+                    startActivity(intent);
+                }
+            });
+
         }
     }
 

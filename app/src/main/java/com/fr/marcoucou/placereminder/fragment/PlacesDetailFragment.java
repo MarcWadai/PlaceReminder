@@ -1,4 +1,4 @@
-package com.fr.marcoucou.placereminder;
+package com.fr.marcoucou.placereminder.fragment;
 
 
 import android.media.Image;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.model.Places;
 
 

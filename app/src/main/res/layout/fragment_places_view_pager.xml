@@ -7,7 +7,7 @@ xmlns:tools="http://schemas.android.com/tools">
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fr.marcoucou.placereminder.ListPlacesFragment"
+    tools:context=".fragment.ListPlacesFragment"
     android:id="@+id/frameViewPagerAnchor">
 
     <android.support.v4.view.ViewPager
@@ -15,10 +15,10 @@ xmlns:tools="http://schemas.android.com/tools">
         android:id="@+id/pager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="100dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="90dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/darker_gray"
         />
     <!-- android:divider="@android:color/transparent" -->
@@ -37,7 +37,7 @@ xmlns:tools="http://schemas.android.com/tools">
     />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabDelete"
+        android:id="@+id/fabMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.fr.marcoucou.placereminder.PlacesDetailFragment;
+import com.fr.marcoucou.placereminder.fragment.PlacesDetailFragment;
 import com.fr.marcoucou.placereminder.model.Places;
 
 import java.util.ArrayList;

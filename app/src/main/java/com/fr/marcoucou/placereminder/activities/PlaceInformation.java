@@ -53,9 +53,13 @@ public class PlaceInformation extends AppCompatActivity{
         placeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasPermissionInManifest(myContext, "android.permission.CAMERA")) {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+                try {
+                    if (hasPermissionInManifest(myContext, "android.permission.CAMERA")) {
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+                    }
+                }catch (SecurityException e){
+                    Toast.makeText(getApplicationContext(), "Please enable permision to use camera",Toast.LENGTH_LONG);
                 }
             }
         });
@@ -65,7 +69,7 @@ public class PlaceInformation extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if( requestCode == CAMERA_PIC_REQUEST)
+        if( requestCode == CAMERA_PIC_REQUEST && data != null)
         {
             thumbnail = (Bitmap) data.getExtras().get("data");
             placeImageView.setImageBitmap(thumbnail);

@@ -25,6 +25,26 @@ public class Places implements Parcelable {
     public Places() {
     }
 
+    protected Places(Parcel in) {
+        placeId = in.readLong();
+        title = in.readString();
+        adresse = in.readString();
+        comment = in.readString();
+        placeImage = in.readParcelable(Bitmap.class.getClassLoader());
+    }
+
+    public static final Creator<Places> CREATOR = new Creator<Places>() {
+        @Override
+        public Places createFromParcel(Parcel in) {
+            return new Places(in);
+        }
+
+        @Override
+        public Places[] newArray(int size) {
+            return new Places[size];
+        }
+    };
+
     public Bitmap getPlaceImage() {
         return placeImage;
     }
@@ -74,6 +94,6 @@ public class Places implements Parcelable {
         dest.writeString(adresse);
         dest.writeLong(placeId);
         dest.writeValue(category);
-        placeImage.writeToParcel(dest,flags);
+        dest.writeValue(placeImage);
     }
 }
