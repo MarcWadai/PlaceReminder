@@ -2,6 +2,7 @@ package com.fr.marcoucou.placereminder.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fr.marcoucou.placereminder.R;
-import com.fr.marcoucou.placereminder.model.NavigationDrawer;
 import com.fr.marcoucou.placereminder.model.Places;
+import com.fr.marcoucou.placereminder.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,9 @@ public class ListPlacesAdapter extends BaseAdapter{
         ImageView imgIcon = (ImageView) convertView.findViewById(R.id.iconPlace);
         TextView txtTitle = (TextView) convertView.findViewById(R.id.titlePlaces);
         TextView txtAddress = (TextView) convertView.findViewById(R.id.textAdresse);
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), Constants.TYPEFACE_NAME);
+        txtAddress.setTypeface(typeface);
+        txtTitle.setTypeface(typeface);
         txtTitle.setText(items.get(position).getTitle());
         txtAddress.setText(items.get(position).getAdresse());
         if(items.get(position).getPlaceImage() != null) {

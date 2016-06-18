@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fr.marcoucou.placereminder.DBLite.PlacesDataSource;
 import com.fr.marcoucou.placereminder.R;
@@ -72,11 +73,21 @@ public class PlacesViewPagerFragment extends Fragment {
 
         if (getArguments() != null) {
             mParam1 = getArguments().getInt(ARG_PARAM1);
-            itemPlaces = placesDataSource.getPlacesFromCategory(getArguments().getInt("position"));
-            viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(),context, itemPlaces);
-            mPager.setAdapter(viewPagerAdapter);
-            mPager.setPageTransformer(false,new MyPagerTransformer(MyPagerTransformer.TypeAnimation.ZOOM));
-            Log.d("param","In the fragment " + mParam1);
+            if (mParam1 != 0){
+
+                itemPlaces = placesDataSource.getPlacesFromCategory(mParam1);
+                viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(),context, itemPlaces);
+                mPager.setAdapter(viewPagerAdapter);
+                mPager.setPageTransformer(false,new MyPagerTransformer(MyPagerTransformer.TypeAnimation.FLOW));
+            }else
+            {
+                itemPlaces = placesDataSource.getAllPlaces();
+                viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(),context, itemPlaces);
+                mPager.setAdapter(viewPagerAdapter);
+                mPager.setPageTransformer(false,new MyPagerTransformer(MyPagerTransformer.TypeAnimation.FLOW));
+            }
+
+
             fabAdd = (FloatingActionButton) myFragmentView.findViewById(R.id.fabAdd);
             fabAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,9 +101,15 @@ public class PlacesViewPagerFragment extends Fragment {
             fabMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), MapActivity.class);
-                    intent.putExtra("address",itemPlaces.get(mPager.getCurrentItem()).getAdresse());
-                    startActivity(intent);
+                    if (itemPlaces.size() > 0) {
+                        Intent intent = new Intent(getActivity(), MapActivity.class);
+                        intent.putExtra("address",itemPlaces.get(mPager.getCurrentItem()).getAdresse());
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(context, "No places found in this category", Toast.LENGTH_LONG).show();
+                    }
+
                 }
             });
             fabViewAll = (FloatingActionButton) myFragmentView.findViewById(R.id.fabViewAll);
@@ -106,6 +123,7 @@ public class PlacesViewPagerFragment extends Fragment {
             });
 
         }
+        placesDataSource.close();
     }
 
 }

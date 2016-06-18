@@ -1,13 +1,23 @@
 package com.fr.marcoucou.placereminder.activities;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.fr.marcoucou.placereminder.R;
+import com.fr.marcoucou.placereminder.utils.Constants;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,22 +37,46 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.location_map);
         mapFragment.getMapAsync(this);
-        Log.d("place",getIntent().getStringExtra("address"));
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(this.googleMap !=null){
+            setMarkerLocation(this.googleMap);
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        checkPermissions();
         this.googleMap = googleMap;
+        setMarkerLocation(googleMap);
+    }
+
+    private void setMarkerLocation(GoogleMap googleMap){
         try {
             googleMap.setMyLocationEnabled(true);
-            String adress = getIntent().getStringExtra("address");cd Doc
+            String adress = getIntent().getStringExtra("address");
             Boolean adressResult = getLatLongFromAddress(adress);
             if (adressResult){
                 googleMap.addMarker(new MarkerOptions().position(latLng).title(adress));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), Constants.MAP_ZOOM));
             }
             else {
                 Toast.makeText(getApplicationContext(), "Places not found, sorry", Toast.LENGTH_LONG);
@@ -52,6 +86,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Log.e("Security", "Security exception " + e);
         }
     }
+
     private Boolean getLatLongFromAddress(String address)
     {
         Boolean gotLatLng = false;
@@ -81,4 +116,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return gotLatLng;
     }
 
+    public boolean checkPermissions(){
+        if (Build.VERSION.SDK_INT > 22 && !hasPermissions(Constants.requiredPermissions)) {
+            Toast.makeText(this, "Please grant all permissions", Toast.LENGTH_LONG).show();
+            goToSettings();
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    public boolean hasPermissions( @NonNull String... permissions) {
+        for (String permission : permissions)
+            if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission(getApplicationContext(),permission))
+                return false;
+        return true;
+    }
+
+    public void goToSettings() {
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        getApplicationContext().startActivity(i);
+    }
 }

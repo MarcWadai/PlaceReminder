@@ -13,8 +13,6 @@ public class Places implements Parcelable {
     private long placeId;
     private String title;
     private String adresse;
-    private Double latitude;
-    private Double longitude;
     private String comment;
 
 

@@ -6,12 +6,12 @@
 
     <ImageView
         android:id="@+id/iconPlace"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:src="@drawable/ic_home"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_empty_picture"
         android:layout_centerVertical="true" />
 
     <TextView
@@ -21,11 +21,13 @@
         android:layout_height="wrap_content"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="@color/list_item_title"
+        android:textColor="@android:color/white"
         android:layout_alignParentRight="true"
+        android:textSize="27sp"
+        android:textStyle="italic"
         android:layout_alignParentEnd="true"
+        android:gravity="center_vertical|center"
         android:layout_toRightOf="@+id/iconPlace"
-        android:layout_toEndOf="@+id/iconPlace"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/textAdresse" />
 
@@ -34,11 +36,15 @@
         android:layout_height="wrap_content"
         android:text="rue du jesaispas quoi"
         android:id="@+id/textAdresse"
-        android:layout_alignParentBottom="true"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:paddingBottom="20dp"
+        android:textColor="@android:color/white"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/titlePlaces"
         android:layout_alignStart="@+id/titlePlaces"
+        android:gravity="center_vertical|center"
         android:layout_below="@+id/iconPlace" />
 
 </RelativeLayout>

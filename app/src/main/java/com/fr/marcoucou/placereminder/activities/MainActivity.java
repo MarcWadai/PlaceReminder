@@ -9,17 +9,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fr.marcoucou.placereminder.fragment.PlacesViewPagerFragment;
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
+import com.fr.marcoucou.placereminder.utils.TypeFaceUtils;
+
 import java.util.ArrayList;
 
 
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // slide menu items
     private String[] navMenuTitles;
-    private TypedArray navMenuIcÒons;
+    private TypedArray navMenuIcons;
 
     private ArrayList<NavigationDrawer> navDrawerItems;
     private NavigationDrawerAdapter adapter;
@@ -47,13 +49,11 @@ public class MainActivity extends AppCompatActivity {
       //  requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
         mTitle = mDrawerTitle = getTitle();
-
         // load slide menu items
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
-
         // nav drawer icons from resources
-        //navMenuIcons = getResources()
-        //        .obtainTypedArray(R.array.nav_drawer_icons);
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.icon_nav_drawer);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
@@ -62,16 +62,14 @@ public class MainActivity extends AppCompatActivity {
         // adding nav drawer items to array
 
         for (int i= 0 ;i < navMenuTitles.length; i++ ){
-            navDrawerItems.add(new NavigationDrawer(navMenuTitles[i],R.drawable.ic_home));
+            navDrawerItems.add(new NavigationDrawer(navMenuTitles[i],navMenuIcons.getResourceId(i,0)));
         }
-
         // Recycle the typed array
-        //navMenuIcons.recycle();
+        navMenuIcons.recycle();
         // setting the nav drawer list adapter
         adapter = new NavigationDrawerAdapter(getApplicationContext(),
                 navDrawerItems);
         mDrawerList.setAdapter(adapter);
-        Log.d("mDrawerList", "count : " + mDrawerList.getAdapter().getCount());
         // enabling action bar app icon and behaving it as toggle button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            displayView(1);
+            displayView(0);
         }
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -125,20 +123,7 @@ public class MainActivity extends AppCompatActivity {
      * */
     private void displayView(int position) {
         // update the main content by replacing fragments
-       /* Fragment fragment =  new ListPlacesFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("position", position);
-        fragment.setArguments(bundle);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.frame_container, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mDrawerList.setSelection(position);
-        setTitle(navMenuTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);*/
+        mDrawerLayout.closeDrawer(mDrawerList);
 
         Fragment fragment =  new PlacesViewPagerFragment();
         Bundle bundle = new Bundle();
@@ -162,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         // Associate searchable configuration with the SearchView
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        return false;
     }
 
 

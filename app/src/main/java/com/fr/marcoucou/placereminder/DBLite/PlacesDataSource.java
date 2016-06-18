@@ -6,16 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.model.PlaceCategory;
 import com.fr.marcoucou.placereminder.model.Places;
+import com.fr.marcoucou.placereminder.utils.DbBitmapUtility;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Marc on 16/04/2016.
@@ -86,6 +82,7 @@ public class PlacesDataSource {
                 cursor.moveToNext();
             }
         }
+        cursor.close();
         return listPlaces;
     }
 
@@ -101,6 +98,7 @@ public class PlacesDataSource {
                 cursor.moveToNext();
             }
         }
+        cursor.close();
         return listPlaces;
     }
 }

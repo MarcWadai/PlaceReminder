@@ -7,22 +7,33 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/backviewpager2"
     tools:context="com.fr.marcoucou.placereminder.activities.PlaceInformation">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:id="@+id/imageView"
         android:src="@drawable/ic_empty_picture"
+        android:background="@drawable/round_corner"
+        android:clickable="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editTextTitle" />
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/editTextAddress" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editTextTitle"
+        android:textColor="@android:color/white"
+        android:maxLines="3"
+        android:maxLength="70"
         android:hint="Title"
+        android:textColorHint="@android:color/white"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -32,16 +43,23 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/editTextAddress"
-        android:hint="address"
+        android:textColor="@android:color/white"
+        android:maxLines="2"
+        android:maxLength="70"
+        android:hint="Address"
+        android:imeOptions="actionGo"
+        android:inputType="text"
+        android:textColorHint="@android:color/white"
+        android:layout_below="@+id/editTextTitle"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView" />
+        android:layout_alignParentStart="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonPosition"
+        android:onClick="currentPosition"
         android:background="@drawable/ic_position"
         android:layout_alignBottom="@+id/editTextAddress"
         android:layout_toRightOf="@+id/editTextAddress"
@@ -69,6 +87,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/editTextAddress" />
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/imageView" />
 
 </RelativeLayout>

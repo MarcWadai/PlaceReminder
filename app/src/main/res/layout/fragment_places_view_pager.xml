@@ -8,6 +8,7 @@ xmlns:tools="http://schemas.android.com/tools">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ListPlacesFragment"
+    android:background="@drawable/backviewpager2"
     android:id="@+id/frameViewPagerAnchor">
 
     <android.support.v4.view.ViewPager
@@ -15,48 +16,46 @@ xmlns:tools="http://schemas.android.com/tools">
         android:id="@+id/pager"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="90dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray"
         />
-    <!-- android:divider="@android:color/transparent" -->
 
 </FrameLayout>
 
 <android.support.design.widget.FloatingActionButton
     android:id="@+id/fabAdd"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
     android:layout_margin="16dp"
     android:clickable="true"
-    android:src="@drawable/ic_add"
+    android:src="@drawable/addbtn"
     app:layout_anchor="@id/frameViewPagerAnchor"
     app:layout_anchorGravity="bottom|right|end"
     />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_add"
-        app:layout_anchor="@id/frameViewPagerAnchor"
-        app:layout_anchorGravity="bottom|center"
-        />
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fabMap"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:src="@drawable/mapbtn2"
+    app:layout_anchor="@id/frameViewPagerAnchor"
+    app:layout_anchorGravity="bottom|center"
+    />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabViewAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:src="@drawable/ic_add"
-        app:layout_anchor="@id/frameViewPagerAnchor"
-        app:layout_anchorGravity="bottom|right|left"
-        />
+<android.support.design.widget.FloatingActionButton
+    android:id="@+id/fabViewAll"
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_margin="16dp"
+    android:clickable="true"
+    android:src="@drawable/allbtn2"
+    app:layout_anchor="@id/frameViewPagerAnchor"
+    app:layout_anchorGravity="bottom|right|left"
+    />
 
 
 </android.support.design.widget.CoordinatorLayout>

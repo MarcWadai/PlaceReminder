@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">PlaceReminder</string>
+    <string name="app_name">Place Keeper</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
+        <item>All</item>
         <item>Restaurant</item>
         <item>Scenery</item>
         <item>Night life</item>
@@ -13,6 +14,14 @@
         <item>Never Saw this before</item>
     </string-array>
 
+    <array name="icon_nav_drawer">
+        <item>@drawable/icon_restaurant</item>
+        <item>@drawable/icon_scenery</item>
+        <item>@drawable/icon_nighlife</item>
+        <item>@drawable/icon_shopping</item>
+        <item>@drawable/icon_shopping</item>
+    </array>
+    <string name="toast_crash">Sorry for the crash, we are sending a report, and will solve the problem</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_place_information">Place Information</string>

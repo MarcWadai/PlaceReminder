@@ -1,6 +1,6 @@
 package com.fr.marcoucou.placereminder.animation;
 
-import android.renderscript.Type;
+
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
