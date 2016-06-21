@@ -174,7 +174,7 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
                             pictureTaken = true;
                             Uri takenPhotoUri = getPhotoFileUri(photoFileName);
                             BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 3;
+                            options.inSampleSize = 5;
                             thumbnail = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
                             placeImageView.setImageBitmap(thumbnail);
                         } catch (Exception e) {
