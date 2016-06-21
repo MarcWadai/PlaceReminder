@@ -17,7 +17,8 @@
     <array name="icon_nav_drawer">
         <item>@drawable/icon_restaurant</item>
         <item>@drawable/icon_scenery</item>
-        <item>@drawable/icon_nighlife</item>
+        <item>@drawable/ic_icon_nighlife</item>
+        <item>@drawable/icon_shopping</item>
         <item>@drawable/icon_shopping</item>
         <item>@drawable/icon_shopping</item>
     </array>

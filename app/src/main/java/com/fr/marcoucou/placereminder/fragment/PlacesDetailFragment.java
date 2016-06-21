@@ -48,6 +48,7 @@ public class PlacesDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_places_detail, container, false);
         TextView title = (TextView) view.findViewById(R.id.detailTitle);
         TextView adress = (TextView) view.findViewById(R.id.detailAdress);
+        TextView date = (TextView) view.findViewById(R.id.textViewDate);
         ImageView image = (ImageView) view.findViewById(R.id.imageView2);
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_NAME);
         title.setTypeface(typeface);
@@ -56,6 +57,7 @@ public class PlacesDetailFragment extends Fragment {
         if(place != null) {
             title.setText(place.getTitle());
             adress.setText(place.getAdresse());
+            date.setText(place.getDate());
             Bitmap bitmap = RoundImageUtils.getRoundedCornerBitmap(place.getPlaceImage(), Constants.ROUND_LEVEL);
             image.setImageBitmap(bitmap);
         }
@@ -65,13 +67,13 @@ public class PlacesDetailFragment extends Fragment {
             BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.empy_view_pager2);
             image.setImageBitmap(drawable.getBitmap());
         }
-        onImageClick(image, title, adress);
+        onImageClick(image, title, adress, date);
         // Inflate the layout for this fragment
         return view ;
     }
 
 
-    public void onImageClick(final ImageView imageView, final TextView title, final TextView address){
+    public void onImageClick(final ImageView imageView, final TextView title, final TextView address,final TextView date){
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +81,7 @@ public class PlacesDetailFragment extends Fragment {
                     isImageFitToScreen=false;
                     title.setVisibility(View.VISIBLE);
                     address.setVisibility(View.VISIBLE);
+                    date.setVisibility(View.VISIBLE);
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.BELOW, R.id.detailAdress);
                     params.setMargins(0,10,0,0);
@@ -88,6 +91,7 @@ public class PlacesDetailFragment extends Fragment {
                     isImageFitToScreen=true;
                     title.setVisibility(View.GONE);
                     address.setVisibility(View.GONE);
+                    date.setVisibility(View.GONE);
                     imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                     imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.fr.marcoucou.placereminder.model.PlaceCategory;
 import com.fr.marcoucou.placereminder.model.Places;
@@ -16,12 +17,13 @@ import java.util.ArrayList;
 /**
  * Created by Marc on 16/04/2016.
  */
+
 public class PlacesDataSource {
 
     private SQLiteDatabase database;
     private SQLHelper databaseHelper;
     private SQLiteDatabase readabledb;
-    private String[] allColumns = { SQLHelper.COLUMN_ID,SQLHelper.COLUMN_TITLE, SQLHelper.COLUMN_ADRESSE, SQLHelper.COLUMN_CATEGORY, SQLHelper.COLUMN_IMAGE };
+    private String[] allColumns = { SQLHelper.COLUMN_ID,SQLHelper.COLUMN_TITLE, SQLHelper.COLUMN_ADRESSE, SQLHelper.COLUMN_CATEGORY, SQLHelper.COLUMN_IMAGE, SQLHelper.COLUMN_DATE };
     private Context context;
 
     public PlacesDataSource(Context context){
@@ -38,13 +40,14 @@ public class PlacesDataSource {
         databaseHelper.close();
     }
 
-    public Places createPlaces(String titlePlace, String placeAdresse, PlaceCategory category, Bitmap image){
+    public Places createPlaces(String titlePlace, String placeAdresse, PlaceCategory category, Bitmap image, String date){
 
         ContentValues values = new ContentValues();
         values.put(SQLHelper.COLUMN_TITLE, titlePlace);
         values.put(SQLHelper.COLUMN_ADRESSE, placeAdresse);
         values.put(SQLHelper.COLUMN_CATEGORY, category.getCategoryId());
         values.put(SQLHelper.COLUMN_IMAGE, DbBitmapUtility.getBytes(image));
+        values.put(SQLHelper.COLUMN_DATE, date);
         long insertId = database.insert(SQLHelper.TABLE_PLACES, null,
                 values);
         Cursor cursor = readabledb.query(SQLHelper.TABLE_PLACES,
@@ -62,7 +65,7 @@ public class PlacesDataSource {
         place.setTitle(cursor.getString(SQLHelper.COLUMN_TITLE_ID));
         place.setAdresse(cursor.getString(SQLHelper.COLUMN_ADRESSE_ID));
         place.setPlaceImage( DbBitmapUtility.getImage(cursor.getBlob(SQLHelper.COLUMN_IMAGE_ID)));
-
+        place.setDate(cursor.getString(SQLHelper.COLUMN_DATE_ID));
         return place;
     }
 

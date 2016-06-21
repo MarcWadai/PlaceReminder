@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -43,7 +45,9 @@ import com.fr.marcoucou.placereminder.utils.ResultLastLocation;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -64,7 +68,7 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
     int CAMERA_PIC_REQUEST = 2;
     private GetPostionUtils postionUtils;
     private GoogleApiClient googleApiClient;
-    private Uri imageUri;
+    public String photoFileName = "placekeeper.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,6 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
         placeImageView = (ImageView) findViewById(R.id.imageView);
         title = (EditText) findViewById(R.id.editTextTitle);
         address = (EditText) findViewById(R.id.editTextAddress);
-
         initEditText(title);
         initEditText(address);
         submitButton = (Button) findViewById(R.id.buttonSubmitPlace);
@@ -90,14 +93,12 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
             public void onClick(View v) {
                 try {
                     if (checkPermissions()) {
-                        ContentValues values = new ContentValues();
-                        values.put(MediaStore.Images.Media.TITLE, "New Picture");
-                        values.put(MediaStore.Images.Media.DESCRIPTION, "From your Camera");
-                        imageUri = getContentResolver().insert(
-                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                        startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+                        photoFileName = java.util.UUID.randomUUID().toString();
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName));
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, CAMERA_PIC_REQUEST);
+                        }
                     }
                 }catch (SecurityException e){
                     Toast.makeText(getApplicationContext(), "Please enable permision to use camera",Toast.LENGTH_LONG);
@@ -106,29 +107,37 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
         });
     }
 
+    // Returns the Uri for a photo stored on disk given the fileName
+    public Uri getPhotoFileUri(String fileName) {
+        // Only continue if the SD Card is mounted
+        if (isExternalStorageAvailable()) {
+            // Get safe storage directory for photos
+            // Use `getExternalFilesDir` on Context to access package-specific directories.
+            // This way, we don't need to request external read/write runtime permissions.
+            File mediaStorageDir = new File(
+                    getExternalFilesDir(Environment.DIRECTORY_PICTURES), "placekeeper");
+
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+                Log.d("placekeeper", "failed to create directory");
+            }
+
+            // Return the file target for the photo based on filename
+            return Uri.fromFile(new File(mediaStorageDir.getPath() + File.separator + fileName));
+        }
+        return null;
+    }
+
+    // Returns true if external storage for photos is available
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+
     public void initEditText(final EditText editText){
         editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-     /*   editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus)
-                v.setOnKeyListener(new View.OnKeyListener(){
-                    public boolean onKey(View v, int keyCode, KeyEvent event)
-                    {
-                        if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                                (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                            // Perform action on key press
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                            return true;
-                        }
-
-                        return false;
-                    }
-                });
-            }
-        });*/
     }
 
     @Override
@@ -160,35 +169,21 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
     {
         super.onActivityResult(requestCode, resultCode, data);
                 if (requestCode == CAMERA_PIC_REQUEST)
-                    if (data!= null) {
+                    if ( resultCode == RESULT_OK) {
                         try {
                             pictureTaken = true;
-                            thumbnail = MediaStore.Images.Media.getBitmap(
-                                    getContentResolver(), imageUri);
-                            int nh = (int) ( thumbnail.getHeight() * (1024 / thumbnail.getWidth()) );
-                            scaled = Bitmap.createScaledBitmap(thumbnail, 1024, nh, true);
-                            placeImageView.setImageBitmap(scaled);
+                            Uri takenPhotoUri = getPhotoFileUri(photoFileName);
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inSampleSize = 3;
+                            thumbnail = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
+                            placeImageView.setImageBitmap(thumbnail);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }else {
                         pictureTaken = false;
-                        Toast.makeText(this, "Picture NOT taken", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Picture NOT taken " +resultCode +"ok "+RESULT_OK, Toast.LENGTH_LONG).show();
                     }
-        /*if( requestCode == CAMERA_PIC_REQUEST && data != null)
-        {
-            thumbnail = (Bitmap) data.getExtras().get("data");
-            thumbnail = RoundImageUtils.getRoundedCornerBitmap(thumbnail,Constants.ROUND_LEVEL);
-            placeImageView.setImageBitmap(thumbnail);
-            pictureTaken = true;
-        }
-        else
-        {
-            pictureTaken = false;
-            Toast.makeText(this, "Picture NOT taken, Please enable camera permission for this app", Toast.LENGTH_LONG).show();
-
-        }*/
-
     }
 
 
@@ -202,14 +197,15 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
             if (!pictureTaken) {
                 PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
                 BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(this, R.drawable.ic_empty_picture);
-                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, drawable.getBitmap());
+                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, drawable.getBitmap(),getCurrentTime());
 
             }
             else{
                 PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
-                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, scaled);
+                placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, thumbnail, getCurrentTime());
             }
             placesDataSource.close();
+            Log.d("cat", "categoryyyy "+ categoryPicker.getValue());
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
