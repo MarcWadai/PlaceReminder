@@ -10,7 +10,7 @@ import android.os.Parcelable;
 
 
 public class Places implements Parcelable {
-    private long placeId;
+    private int placeId;
     private String title;
     private String adresse;
     private String date;
@@ -24,7 +24,7 @@ public class Places implements Parcelable {
     }
 
     protected Places(Parcel in) {
-        placeId = in.readLong();
+        placeId = in.readInt();
         title = in.readString();
         adresse = in.readString();
         date = in.readString();
@@ -59,11 +59,11 @@ public class Places implements Parcelable {
         return adresse;
     }
 
-    public long getId(){
+    public int getId(){
         return placeId;
     }
 
-    public void setPlaceId(long id){
+    public void setPlaceId(int id){
         this.placeId = id;
     }
 
@@ -86,6 +86,7 @@ public class Places implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(placeId);
         dest.writeString(title);
         dest.writeString(adresse);
         dest.writeLong(placeId);

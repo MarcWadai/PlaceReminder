@@ -14,24 +14,29 @@
             android:layout_height="match_parent"
             tools:context=".fragment.ListPlacesFragment"
             android:id="@+id/relativelayoutView">
-
-            <ListView
-                android:id="@+id/list_places"
+            <view
+                class="com.fr.marcoucou.placereminder.animation.BackgroundContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:choiceMode="singleChoice"
-                android:dividerHeight="3.0sp"
-                android:listSelector="@drawable/list_selector"/>
-            <!-- android:divider="@android:color/transparent" -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/emptyTextView"
-                android:gravity="center"
-                style="@android:style/TextAppearance.Large"
-                android:text="No Places Found"
-                />
+                android:id="@+id/listViewBackground">
+                <ListView
+                    android:id="@+id/list_places"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:choiceMode="singleChoice"
+                    android:dividerHeight="3.0sp"
+                    android:listSelector="@drawable/list_selector"/>
+                <!-- android:divider="@android:color/transparent" -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/emptyTextView"
+                    android:gravity="center"
+                    style="@android:style/TextAppearance.Large"
+                    android:text="No Places Found"
+                    />
+            </view>
 
         </FrameLayout>
 

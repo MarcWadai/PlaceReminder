@@ -84,9 +84,11 @@ public class PlacesDetailFragment extends Fragment {
                     date.setVisibility(View.VISIBLE);
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.BELOW, R.id.detailAdress);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     params.setMargins(0,10,0,0);
                     imageView.setLayoutParams(params);
-                    imageView.setAdjustViewBounds(true);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    //imageView.setAdjustViewBounds(true);
                 }else{
                     isImageFitToScreen=true;
                     title.setVisibility(View.GONE);

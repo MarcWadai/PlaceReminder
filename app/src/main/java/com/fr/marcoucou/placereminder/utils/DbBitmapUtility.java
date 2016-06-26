@@ -13,7 +13,7 @@ public class DbBitmapUtility {
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 60, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
         return stream.toByteArray();
     }
 
@@ -23,8 +23,7 @@ public class DbBitmapUtility {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(image, 0, image.length, options);
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, 960, 640);
-
+        options.inSampleSize = calculateInSampleSize(options, 640, 480);
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeByteArray(image, 0, image.length, options);

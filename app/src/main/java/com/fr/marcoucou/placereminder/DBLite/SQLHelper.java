@@ -20,6 +20,7 @@ public class SQLHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DATE = "date";
 
     // when fetching the column used
+    public static final int COLUMN_ID_ID = 0;
     public static final int COLUMN_TITLE_ID = 1;
     public static final int COLUMN_ADRESSE_ID = 2;
     public static final int COLUMN_CATEGORY_ID = 3;

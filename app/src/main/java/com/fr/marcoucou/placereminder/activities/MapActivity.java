@@ -1,5 +1,6 @@
 package com.fr.marcoucou.placereminder.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -32,11 +33,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap googleMap;
     private LatLng latLng = new LatLng(0.0,0.0);
+    private ProgressDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        progressBar = new ProgressDialog(MapActivity.this);
+        progressBar.setCancelable(false);
+        progressBar.setMessage("Getting the address position ");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setIndeterminate(true);
+        progressBar.show();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.location_map);
@@ -67,6 +76,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         checkPermissions();
         this.googleMap = googleMap;
         setMarkerLocation(googleMap);
+        progressBar.dismiss();
     }
 
     private void setMarkerLocation(GoogleMap googleMap){

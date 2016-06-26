@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fr.marcoucou.placereminder.R;
@@ -15,6 +16,7 @@ import com.fr.marcoucou.placereminder.model.Places;
 import com.fr.marcoucou.placereminder.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Marc on 15/03/2016.
@@ -23,10 +25,12 @@ public class ListPlacesAdapter extends BaseAdapter{
 
     private Context context;
     private ArrayList<Places> items;
+    private View.OnTouchListener listener;
 
-    public ListPlacesAdapter(Context context, ArrayList<Places> items){
+    public ListPlacesAdapter(Context context, ArrayList<Places> items, View.OnTouchListener listener){
         this.context = context;
         this.items = items;
+        this.listener = listener;
     }
 
     @Override
@@ -37,6 +41,11 @@ public class ListPlacesAdapter extends BaseAdapter{
     @Override
     public Object getItem(int position) {
         return items.get(position);
+    }
+
+    @Override
+    public boolean hasStableIds(){
+        return true;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class ListPlacesAdapter extends BaseAdapter{
         if(items.get(position).getPlaceImage() != null) {
             imgIcon.setImageBitmap(items.get(position).getPlaceImage());
         }
-
+        convertView.setOnTouchListener(listener);
         return convertView;
     }
 }

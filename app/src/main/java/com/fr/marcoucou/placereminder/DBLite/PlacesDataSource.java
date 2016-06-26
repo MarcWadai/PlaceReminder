@@ -61,7 +61,7 @@ public class PlacesDataSource {
 
     private Places cursorToPlace(Cursor cursor) {
         Places place = new Places();
-        place.setPlaceId(cursor.getLong(0));
+        place.setPlaceId(cursor.getInt(SQLHelper.COLUMN_ID_ID));
         place.setTitle(cursor.getString(SQLHelper.COLUMN_TITLE_ID));
         place.setAdresse(cursor.getString(SQLHelper.COLUMN_ADRESSE_ID));
         place.setPlaceImage( DbBitmapUtility.getImage(cursor.getBlob(SQLHelper.COLUMN_IMAGE_ID)));
@@ -70,9 +70,11 @@ public class PlacesDataSource {
     }
 
 
-    public void deletePlaces(){
-
+    public boolean deletePlace(int placeid)
+    {
+        return database.delete(SQLHelper.TABLE_PLACES, SQLHelper.COLUMN_ID + "=" + placeid, null) > 0;
     }
+
 
     public ArrayList<Places> getAllPlaces(){
         ArrayList<Places> listPlaces = new ArrayList<Places>();
