@@ -23,6 +23,7 @@
                     android:id="@+id/list_places"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+
                     android:layout_gravity="start"
                     android:choiceMode="singleChoice"
                     android:dividerHeight="3.0sp"
@@ -50,6 +51,17 @@
             android:src="@drawable/addbtn"
             app:layout_anchor="@id/relativelayoutView"
             app:layout_anchorGravity="bottom|right|end"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMap"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:src="@drawable/mapbtn2"
+            app:layout_anchor="@id/relativelayoutView"
+            app:layout_anchorGravity="bottom|center"
             />
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.DrawerLayout>

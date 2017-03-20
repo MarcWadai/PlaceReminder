@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.google.android.gms:play-services:8.+'
     compile 'ch.acra:acra:4.6.2'
+    compile 'io.github.kobakei:ratethisapp:1.0.5'
 }

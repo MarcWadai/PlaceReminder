@@ -15,16 +15,23 @@
     </string-array>
 
     <array name="icon_nav_drawer">
+        <item>@drawable/ic_all</item>
         <item>@drawable/icon_restaurant</item>
         <item>@drawable/icon_scenery</item>
         <item>@drawable/ic_icon_nighlife</item>
         <item>@drawable/icon_shopping</item>
-        <item>@drawable/icon_shopping</item>
-        <item>@drawable/icon_shopping</item>
+        <item>@drawable/ic_never_seen</item>
     </array>
     <string name="toast_crash">Sorry for the crash, we are sending a report, and will solve the problem</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_place_information">Place Information</string>
     <string name="title_activity_list_place_all">All Places </string>
+
+    <!-- alert, toast and progress bar message -->
+    <string name="progress_message_position">Getting the address position</string>
+    <string name="toast_permission_geoloc">Getting the address position</string>
+    <string name="alert_message">External storage permission is necessary</string>
+    <string name="toast_noplace_found">No places found in this category</string>
+
 </resources>

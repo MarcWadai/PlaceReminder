@@ -106,4 +106,19 @@ public class PlacesDataSource {
         cursor.close();
         return listPlaces;
     }
+
+    public ArrayList<Places> getPlacesFromAddress(String placeAddress){
+        ArrayList<Places> listPlaces = new ArrayList<Places>();
+        String query = "select * from "+ SQLHelper.TABLE_PLACES + " where "+SQLHelper.COLUMN_ADRESSE +" = '" + placeAddress +"'";
+        Cursor cursor = readabledb.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            while (cursor.isAfterLast() == false ){
+                Places placeGet = cursorToPlace(cursor);
+                listPlaces.add(placeGet);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return listPlaces;
+    }
 }

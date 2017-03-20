@@ -3,6 +3,7 @@ package com.fr.marcoucou.placereminder.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -16,16 +17,22 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.fr.marcoucou.placereminder.DBLite.PlacesDataSource;
 import com.fr.marcoucou.placereminder.R;
+import com.fr.marcoucou.placereminder.model.Places;
 import com.fr.marcoucou.placereminder.utils.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,14 +41,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap googleMap;
     private LatLng latLng = new LatLng(0.0,0.0);
     private ProgressDialog progressBar;
+    private PlacesDataSource placesDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        placesDataSource = new PlacesDataSource(this);
+        placesDataSource.open();
         progressBar = new ProgressDialog(MapActivity.this);
         progressBar.setCancelable(false);
-        progressBar.setMessage("Getting the address position ");
+        progressBar.setMessage(getString(R.string.progress_message_position));
         progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressBar.setIndeterminate(true);
         progressBar.show();
@@ -82,20 +92,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void setMarkerLocation(GoogleMap googleMap){
         try {
             googleMap.setMyLocationEnabled(true);
-            String adress = getIntent().getStringExtra("address");
-            Boolean adressResult = getLatLongFromAddress(adress);
-            if (adressResult){
-                googleMap.addMarker(new MarkerOptions().position(latLng).title(adress));
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), Constants.MAP_ZOOM));
+            if (getIntent().hasExtra("listaddress")){
+                int category = getIntent().getIntExtra("listaddress", 1);
+                ArrayList<Places> placeslist = placesDataSource.getPlacesFromCategory(category);
+                for (int i=0; i< placeslist.size(); i++){
+                    addressSearchResult(placeslist.get(i),Constants.MAP_ZOOM_LARGE);
+                }
             }
-            else {
-                Toast.makeText(getApplicationContext(), "Places not found, sorry", Toast.LENGTH_LONG);
+            else{
+                String adress = getIntent().getStringExtra("address");
+                ArrayList<Places> places = placesDataSource.getPlacesFromAddress(adress);
+                addressSearchResult(places.get(0), Constants.MAP_ZOOM);
             }
         } catch(SecurityException e){
-            Toast.makeText(getApplicationContext(),"Please enable geolocalisation permision",Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(),getString(R.string.toast_permission_geoloc),Toast.LENGTH_LONG);
             Log.e("Security", "Security exception " + e);
         }
     }
+
+    public void addressSearchResult(Places places, float mapZoom){
+        Boolean adressResult = getLatLongFromAddress(places.getAdresse());
+        if (adressResult){
+            Bitmap resizedbitmap = Bitmap.createScaledBitmap(places.getPlaceImage(), places.getPlaceImage().getWidth()/4, places.getPlaceImage().getHeight()/4 , false);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizedbitmap);
+            googleMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(places.getTitle())
+                    .snippet(places.getAdresse())
+                    .icon(bitmapDescriptor)
+            );
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latLng.latitude, latLng.longitude), mapZoom));
+        }
+        else {
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_noplace_found), Toast.LENGTH_LONG);
+        }
+    }
+
 
     private Boolean getLatLongFromAddress(String address)
     {
@@ -127,7 +158,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public boolean checkPermissions(){
-        if (Build.VERSION.SDK_INT > 22 && !hasPermissions(Constants.requiredPermissions)) {
+        if (Build.VERSION.SDK_INT > 22 && !hasPermissions(Constants.requiredLocationPermissions)) {
             Toast.makeText(this, "Please grant all permissions", Toast.LENGTH_LONG).show();
             goToSettings();
             return false;

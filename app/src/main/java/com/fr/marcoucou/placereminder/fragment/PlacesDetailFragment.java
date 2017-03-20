@@ -62,8 +62,7 @@ public class PlacesDetailFragment extends Fragment {
             image.setImageBitmap(bitmap);
         }
         else{
-            title.setText("Your Place Name");
-            adress.setText("Your Place address ");
+
             BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(getActivity(), R.drawable.empy_view_pager2);
             image.setImageBitmap(drawable.getBitmap());
         }

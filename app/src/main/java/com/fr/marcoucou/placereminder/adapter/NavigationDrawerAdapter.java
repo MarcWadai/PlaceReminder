@@ -69,13 +69,11 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 
     public void animationIcon(ImageView icon){
-        RotateAnimation anim = new RotateAnimation(10f, -10f,0f, 0f);
+        RotateAnimation anim = new RotateAnimation(5f, -10f,0f, 0f);
         anim.setInterpolator(new LinearInterpolator());
         anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(300);
-
+        anim.setDuration(700);
         icon.startAnimation(anim);
-
     }
 
 }

@@ -1,7 +1,7 @@
 package com.fr.marcoucou.placereminder.activities;
 
 
-import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -9,25 +9,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.fr.marcoucou.placereminder.fragment.PlacesViewPagerFragment;
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.adapter.NavigationDrawerAdapter;
 import com.fr.marcoucou.placereminder.model.NavigationDrawer;
-import com.fr.marcoucou.placereminder.utils.TypeFaceUtils;
+import com.fr.marcoucou.placereminder.utils.Constants;
+import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -51,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Monitor launch times and interval from installation
+        RateThisApp.onStart(this);
+        // If the criteria is satisfied, "Rate this app" dialog will be shown
+        RateThisApp.showRateDialogIfNeeded(this);
+
         initializeNavDrawer();
         if (savedInstanceState == null) {
             // on first time display view for first nav item
@@ -104,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
-
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
     }
 
@@ -113,6 +112,15 @@ public class MainActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         displayView(mDrawerList.getCheckedItemPosition());
+        SharedPreferences sharedPref = getSharedPreferences(Constants.MY_PREF_FILE, MODE_PRIVATE);
+        boolean drawerIsOpen = sharedPref.getBoolean("open", false);
+        if(drawerIsOpen){
+            mDrawerLayout.openDrawer(mDrawerList);//Gravity.LEFT);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean("open", false).commit();
+        }
+        Log.d("drawer", "drawerisopen " +drawerIsOpen);
+
     }
 
     @Override

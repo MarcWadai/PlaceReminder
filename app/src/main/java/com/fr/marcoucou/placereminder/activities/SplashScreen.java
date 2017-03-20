@@ -1,6 +1,8 @@
 package com.fr.marcoucou.placereminder.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.fr.marcoucou.placereminder.R;
+import com.fr.marcoucou.placereminder.utils.Constants;
 
 public class SplashScreen extends AppCompatActivity {
     // Splash screen timer
@@ -21,6 +24,9 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getSupportActionBar().hide();
+        SharedPreferences.Editor editor = getSharedPreferences(Constants.MY_PREF_FILE, MODE_PRIVATE).edit();
+        editor.putBoolean("open", true);
+        editor.commit();
 
         new Handler().postDelayed(new Runnable() {
 

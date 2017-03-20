@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fr.marcoucou.placereminder.DBLite.PlacesDataSource;
 import com.fr.marcoucou.placereminder.R;
@@ -45,6 +46,9 @@ public class PlaceListAll extends AppCompatActivity {
     private HashMap<Long, Integer> mItemIdTopMap = new HashMap<Long, Integer>();
     private  ArrayList<Places> itemPlaces;
     private ArrayList<Integer> itemPlacesDeleted;
+    private ArrayList<String> itemPlacesAddresses;
+    private FloatingActionButton fabMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,23 +85,45 @@ public class PlaceListAll extends AppCompatActivity {
         placesDataSource.open();
         if (indexPlace != 0){
             itemPlaces = placesDataSource.getPlacesFromCategory(indexPlace);
-            ListPlacesAdapter adapter = new ListPlacesAdapter(getApplicationContext(),
-                    itemPlaces,mTouchListener);
-            listPlaces.setAdapter(adapter);
         }else{
             itemPlaces = placesDataSource.getAllPlaces();
-            adapter = new ListPlacesAdapter(getApplicationContext(),
-                    itemPlaces,mTouchListener);
-            listPlaces.setAdapter(adapter);
         }
-
-        //setListViewOnClick();
+        adapter = new ListPlacesAdapter(getApplicationContext(),
+                itemPlaces,mTouchListener);
+        listPlaces.setAdapter(adapter);
+        getAllAddress();
         placesDataSource.close();
         TextView emptyTextView = (TextView) findViewById(R.id.emptyTextView);
         Typeface typeface = Typeface.createFromAsset( getAssets(), Constants.TYPEFACE_NAME);
         emptyTextView.setTypeface(typeface);
         listPlaces.setEmptyView(findViewById(R.id.emptyTextView));
         itemPlacesDeleted = new ArrayList<Integer>();
+
+        fabMap = (FloatingActionButton) findViewById(R.id.fabMap);
+        fabMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemPlaces.size() > 0) {
+                    String[] stockArr = new String[itemPlacesAddresses.size()];
+                    stockArr = itemPlacesAddresses.toArray(stockArr);
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    intent.putExtra("listaddress",indexPlace);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.toast_noplace_found), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+    public void getAllAddress(){
+        itemPlacesAddresses = new ArrayList<String>();
+        for (int i = 0; i< itemPlaces.size();i++){
+           itemPlacesAddresses.add(itemPlaces.get(i).getAdresse());
+        }
+
     }
 
     @Override
@@ -291,6 +317,7 @@ public class PlaceListAll extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         deletePlacesFromDB();
+        itemPlacesDeleted.clear();
     }
 
 

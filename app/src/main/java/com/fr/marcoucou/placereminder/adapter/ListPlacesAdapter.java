@@ -2,6 +2,7 @@ package com.fr.marcoucou.placereminder.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.fr.marcoucou.placereminder.R;
 import com.fr.marcoucou.placereminder.model.Places;
 import com.fr.marcoucou.placereminder.utils.Constants;
+import com.fr.marcoucou.placereminder.utils.DbBitmapUtility;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -58,7 +60,7 @@ public class ListPlacesAdapter extends BaseAdapter{
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater)
                     context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.places_list_item, null);
+            convertView = mInflater.inflate(R.layout.places_list_item,parent, false);
         }
 
         ImageView imgIcon = (ImageView) convertView.findViewById(R.id.iconPlace);
@@ -70,7 +72,8 @@ public class ListPlacesAdapter extends BaseAdapter{
         txtTitle.setText(items.get(position).getTitle());
         txtAddress.setText(items.get(position).getAdresse());
         if(items.get(position).getPlaceImage() != null) {
-            imgIcon.setImageBitmap(items.get(position).getPlaceImage());
+            Bitmap circularimage = DbBitmapUtility.getCroppedCircularBitmap(items.get(position).getPlaceImage());
+            imgIcon.setImageBitmap(circularimage);
         }
         convertView.setOnTouchListener(listener);
         return convertView;

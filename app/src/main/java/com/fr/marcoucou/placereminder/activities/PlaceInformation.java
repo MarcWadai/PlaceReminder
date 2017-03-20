@@ -1,9 +1,11 @@
 package com.fr.marcoucou.placereminder.activities;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -23,7 +25,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -46,6 +50,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -66,9 +71,12 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
     private Button submitButton;
     private Boolean pictureTaken = false;
     int CAMERA_PIC_REQUEST = 2;
+    int CAMERA_SELECT_FILE = 3;
     private GetPostionUtils postionUtils;
     private GoogleApiClient googleApiClient;
     public String photoFileName = "placekeeper.jpg";
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,28 +91,67 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
         submitButton = (Button) findViewById(R.id.buttonSubmitPlace);
         categoryPicker = (NumberPicker) findViewById(R.id.categoryPicker);
         categoryPicker.setMinValue(1);
-        categoryPicker.setMaxValue(getResources().getStringArray(R.array.nav_drawer_items).length -1);
-        String[] tmpNavItems = Arrays.copyOfRange(getResources().getStringArray(R.array.nav_drawer_items), 1, getResources().getStringArray(R.array.nav_drawer_items).length);
+        categoryPicker.setMaxValue(getResources().getStringArray(R.array.nav_drawer_items).length -1 );
+        String[] tmpNavItems = Arrays.copyOfRange(getResources().getStringArray(R.array.nav_drawer_items), 1, getResources().getStringArray(R.array.nav_drawer_items).length );
         categoryPicker.setDisplayedValues(tmpNavItems);
         setNumberPickerTextColor(categoryPicker, Color.WHITE);
         this.myContext = this;
         placeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (checkPermissions()) {
-                        photoFileName = java.util.UUID.randomUUID().toString();
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName));
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            startActivityForResult(intent, CAMERA_PIC_REQUEST);
+                AlertPictureClick();
+            }
+        });
+    }
+
+    public void takePictureClick(){
+        try {
+            if (checkPermissions()) {
+                photoFileName = java.util.UUID.randomUUID().toString();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, getPhotoFileUri(photoFileName));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, CAMERA_PIC_REQUEST);
+                }
+            }
+        }catch (SecurityException e){
+            Toast.makeText(getApplicationContext(), "Please enable permision to use camera",Toast.LENGTH_LONG);
+        }
+    }
+
+    private void galleryClick()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"),CAMERA_SELECT_FILE);
+    }
+
+    public void AlertPictureClick(){
+        CharSequence colors[] = new CharSequence[] {"Take a Picture", "Select from gallery"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pictures");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                switch(which){
+                    case 0 :
+                        takePictureClick();
+                        break;
+                    case 1 :
+                        if (checkPermissionExternalStorage()){
+                            galleryClick();
                         }
-                    }
-                }catch (SecurityException e){
-                    Toast.makeText(getApplicationContext(), "Please enable permision to use camera",Toast.LENGTH_LONG);
+                        else{
+                            //Toast.makeText(getParent(), "Please enable permission to read external storage", Toast.LENGTH_LONG).show();
+                        }
+                        break;
                 }
             }
         });
+        builder.show();
     }
 
     // Returns the Uri for a photo stored on disk given the fileName
@@ -168,22 +215,34 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-                if (requestCode == CAMERA_PIC_REQUEST)
-                    if ( resultCode == RESULT_OK) {
-                        try {
-                            pictureTaken = true;
-                            Uri takenPhotoUri = getPhotoFileUri(photoFileName);
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inSampleSize = 6;
-                            thumbnail = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
-                            placeImageView.setImageBitmap(thumbnail);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }else {
-                        pictureTaken = false;
-                        Toast.makeText(this, "Picture NOT taken " +resultCode +"ok "+RESULT_OK, Toast.LENGTH_LONG).show();
-                    }
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    pictureTaken = true;
+                    Uri takenPhotoUri = getPhotoFileUri(photoFileName);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize = 6;
+                    thumbnail = BitmapFactory.decodeFile(takenPhotoUri.getPath(), options);
+                    placeImageView.setImageBitmap(thumbnail);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                pictureTaken = false;
+                Toast.makeText(this, "Picture NOT taken " + resultCode + "ok " + RESULT_OK, Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == CAMERA_SELECT_FILE){
+            if (data != null) {
+                try {
+                    thumbnail = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                placeImageView.setImageBitmap(thumbnail);
+                pictureTaken = true;
+            }
+        }
     }
 
 
@@ -195,23 +254,18 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
             PlacesDataSource placesDataSource = new PlacesDataSource(this);
             placesDataSource.open();
             if (!pictureTaken) {
-                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
+                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue() - 1], categoryPicker.getValue() );
                 BitmapDrawable drawable = (BitmapDrawable) ContextCompat.getDrawable(this, R.drawable.ic_empty_picture);
                 placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, drawable.getBitmap(),getCurrentTime());
-
             }
             else{
-                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue()], categoryPicker.getValue());
+                PlaceCategory cat = new PlaceCategory(categoryPicker.getDisplayedValues()[categoryPicker.getValue() - 1], categoryPicker.getValue() );
                 placesDataSource.createPlaces(title.getText().toString(), address.getText().toString(), cat, thumbnail, getCurrentTime());
             }
             placesDataSource.close();
-            Log.d("cat", "categoryyyy "+ categoryPicker.getValue());
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-
-        Log.d("time",getCurrentTime());
-
         googleApiClient.disconnect();
     }
 
@@ -219,7 +273,7 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
     public String getCurrentTime(){
         SimpleDateFormat serverFormat;
         Calendar c = Calendar.getInstance();
-        serverFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss",Locale.getDefault());
+        serverFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());//.format(c.getTime());
         return serverFormat.format(c.getTime()).toString();
     }
 
@@ -308,14 +362,45 @@ public class PlaceInformation extends AppCompatActivity implements ResultLastLoc
         }
         return false;
     }
+
     public boolean checkPermissions(){
-        if (Build.VERSION.SDK_INT > 22 && !hasPermissions(Constants.requiredPermissions)) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && !hasPermissions(Constants.requiredPermissions)) {
             Toast.makeText(this, "Please grant all permissions", Toast.LENGTH_LONG).show();
             goToSettings();
             return false;
         }
         else{
          return true;
+        }
+    }
+
+    public boolean checkPermissionExternalStorage(){
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if(currentAPIVersion>= Build.VERSION_CODES.LOLLIPOP)
+        {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                    alertBuilder.setCancelable(true);
+                    alertBuilder.setTitle("Permission necessary");
+                    alertBuilder.setMessage(getString(R.string.alert_message));
+                    alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(getParent(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                        }
+                    });
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+                } else {
+                    ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 
